@@ -3,7 +3,7 @@
 import socket, select
 import time
 
-TIMEOUT = 30 # unit is seconds
+TIMEOUT = 10 # unit is seconds
 BUF_SIZE = 1024 # unit is bytes
 
 class TCPsocket:
@@ -43,8 +43,10 @@ class TCPsocket:
             self.sock = None
             return
         try:
+            start = time.time()
             self.sock.connect((ip, port))   # server address is defined by (ip, port)
             print("Successfully connect to host:", ip)
+            print('Connection time',(time.time()-start)*1000,'ms')
         except socket.error as e:
             print("Failed to connect: {}".format(e))
             self.sock.close()
@@ -70,7 +72,7 @@ class TCPsocket:
         reply = bytearray()    # b'', local variable, bytearray is multable
         bytesRecd = 0   # local integer
 
-        self.sock.setblocking(1)    # flag 0 to set non-blocking mode of the socket
+        self.sock.setblocking(0)    # flag 0 to set non-blocking mode of the socket
         #Use flag 1 for blocking and for get request
         ready = select.select([self.sock], [], [], TIMEOUT) # https://docs.python.org/3/library/select.html
         if ready[0] == []:     # timeout

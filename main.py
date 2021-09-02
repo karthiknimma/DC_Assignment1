@@ -2,23 +2,35 @@ from Ass1Tcpsocket import TCPsocket
 from Ass1Request import Request
 from urllib.parse import urlparse
 from URLparse import URLparse
-def main(): # function, method are the same
 
+import sys
+
+
+
+
+
+def main(): # function, method are the same
+    #Checking number of arguments
+    if(len(sys.argv) != 2):
+        print("Expecting one argument: URL")
+        exit(0)
+
+    print('Argument List:', str(sys.argv))
     mysocket = TCPsocket() # create an object of TCP socket
     mysocket.createSocket()
-    host = 'http://www.yahoo.com'
+    hostname = sys.argv[1]
+    print(hostname)
     p = URLparse()
-    parse_result = p.parse(host)
-    print(parse_result)
-    print ('port    :', parse_result.port)
-    ip = mysocket.getIP(parse_result.hostname)
-    port = 80
+    host, path, query, port = p.parse(hostname)
+    print ('port    :', port)
+    ip = mysocket.getIP(host)
+
     mysocket.connect(ip, port)
 
     # build our request
     myrequest = Request()
-    msg = myrequest.getRequest(host,parse_result.path,parse_result.query)
-    # print(msg)
+    msg = myrequest.getRequest(host,path,query)
+    print(msg)
     # msg = myrequest.headRequest(host)
 
     # send out request

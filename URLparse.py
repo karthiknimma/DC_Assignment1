@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 class URLparse:
     def __init__(self):
         self.host = ""  # each object's instance variables
-        self.port = ""
+        self.port = 0
         self.path = ""  # remote host name
         self.query = ""
         self.path = ""
@@ -14,10 +14,10 @@ class URLparse:
         if(o.netloc) != '':
             self.host = o.netloc
 
-        if(o.port != ''):
+        if(o.port != None):
             self.port = o.port
         else:
-            self.port = o.port
+            self.port = 80
 
         if(o.path != ''):
             self.path=o.path
@@ -30,5 +30,5 @@ class URLparse:
             self.query=''
 
         print(self.host,self.path,self.query,self.port)
-        return o
+        return self.host,self.path,self.query,self.port
         # if(o.path)
