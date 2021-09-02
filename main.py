@@ -1,16 +1,17 @@
 from Ass1Tcpsocket import TCPsocket
 from Ass1Request import Request
 from urllib.parse import urlparse
-
+from URLparse import URLparse
 def main(): # function, method are the same
 
     mysocket = TCPsocket() # create an object of TCP socket
     mysocket.createSocket()
-    host = 'www.yahoo.com'
-    parse_result = urlparse(host)
+    host = 'http://www.yahoo.com'
+    p = URLparse()
+    parse_result = p.parse(host)
     print(parse_result)
     print ('port    :', parse_result.port)
-    ip = mysocket.getIP(host)
+    ip = mysocket.getIP(parse_result.hostname)
     port = 80
     mysocket.connect(ip, port)
 
