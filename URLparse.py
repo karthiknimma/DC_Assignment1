@@ -29,6 +29,5 @@ class URLparse:
         else:
             self.query=''
 
-        print(self.host,self.path,self.query,self.port)
-        return self.host,self.path,self.query,self.port
-        # if(o.path)
+        print('Parsing URl', self.host, self.path, self.query, self.port)
+        return self.host, self.path, self.query, self.port

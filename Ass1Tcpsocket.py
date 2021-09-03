@@ -7,30 +7,25 @@ TIMEOUT = 10 # unit is seconds
 BUF_SIZE = 1024 # unit is bytes
 
 class TCPsocket:
-    # list our instance variables
-    # Constructor: create an object
     def __init__(self):
-        self.sock = None  # each object's instance variables
-        self.host = ""  # remote host name
-        print("create an object of TCPsocket")
-
-
+        self.sock = None
+        self.host = ""
 
     def createSocket(self):
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # self.sock is an instance variable
-            print("created a tcp socket!")
+            print("Created a tcp socket!")
         except socket.error as e:
             print("Failed to create a TCP socket {}".format(e))
             self.sock = None
 
-    # www.google.com -> host name
-    # given a host name, how to get its ip address
-    # Return the ip of input hostname. Both ip and hostname in string
+
     def getIP(self, hostname):
         self.host = hostname
         try:
+            start = time.time()
             ip = socket.gethostbyname(hostname)   # ip is a local variable to getIP(hostname), ip is of string type
+            print('Doing DNS. Done in..',(time.time()-start)*1000,'ms')
         except socket.gaierror:
             print("Failed to gethostbyname")
             return None
@@ -46,7 +41,7 @@ class TCPsocket:
             start = time.time()
             self.sock.connect((ip, port))   # server address is defined by (ip, port)
             print("Successfully connect to host:", ip)
-            print('Connection time',(time.time()-start)*1000,'ms')
+            print('Connecting on the page..',(time.time()-start)*1000,'ms')
         except socket.error as e:
             print("Failed to connect: {}".format(e))
             self.sock.close()
