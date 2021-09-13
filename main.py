@@ -97,9 +97,9 @@ def main():
             print("Verifying header...status Code: ", x[1])
 
             r = requests.get(url)
+            start = time.time()
             soup = BeautifulSoup(r.text, "html.parser")
             count = 0
-            start = time.time()
             for link in soup.find_all('a'):
                 # print(link.get('href'))
                 count += 1
