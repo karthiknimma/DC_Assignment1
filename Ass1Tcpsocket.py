@@ -14,7 +14,7 @@ class TCPsocket:
     def createSocket(self):
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # self.sock is an instance variable
-            print("Created a tcp socket!")
+            # print("Created a tcp socket!")
         except socket.error as e:
             print("Failed to create a TCP socket {}".format(e))
             self.sock = None
@@ -38,10 +38,8 @@ class TCPsocket:
             self.sock = None
             return
         try:
-            start = time.time()
             self.sock.connect((ip, port))   # server address is defined by (ip, port)
             print("Successfully connect to host:", ip)
-            print('Connecting on the page..',(time.time()-start)*1000,'ms')
         except socket.error as e:
             print("Failed to connect: {}".format(e))
             self.sock.close()
@@ -62,20 +60,14 @@ class TCPsocket:
 
     # Receive the reply from the server. Return the reply as string
     def receive(self):
-        if self.sock is None:
-            return ""
         reply = bytearray()    # b'', local variable, bytearray is multable
+        if self.sock is None:
+            return reply
+
+        self.sock.settimeout(TIMEOUT)
+
         bytesRecd = 0   # local integer
-
-        self.sock.setblocking(0)    # flag 0 to set non-blocking mode of the socket
-        #Use flag 1 for blocking and for get request
-        ready = select.select([self.sock], [], [], TIMEOUT) # https://docs.python.org/3/library/select.html
-        if ready[0] == []:     # timeout
-            print("Time out on", self.host)
-            return ""
-        # else reader has data to read
         start = time.time()
-
         try:
             while True:         # use a loop to receive data until we receive all data
                 data = self.sock.recv(BUF_SIZE)  # returned chunk of data with max length BUF_SIZE. data is in bytes
@@ -84,12 +76,13 @@ class TCPsocket:
                 else:
                    reply += data  # append to reply
                    bytesRecd += len(data)
-            print('received in',(time.time()-start)*1000,'ms')
+            print('Loading done in ..', (time.time() - start) * 1000, 'ms', 'with', bytesRecd , 'bytes' )
         except socket.error as e:
             print("socket error in receive: {}".format(e))
             self.sock.close()
             self.sock = None
-        return str(reply)
+        reply_str = reply.decode()
+        return reply_str
 
     # Close socket
     def close(self):
